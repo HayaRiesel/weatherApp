@@ -1,0 +1,86 @@
+{% extends "search.html" %}
+
+{% block choose_date %}
+    <form action="/results" method="POST">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <label for="start_date">Start Date</label>
+                <input type="date" onchange="limitEndDate()" class="form-control" required id="start_date"
+                       name="start_date"
+                       value={{ mySearch.start_date }}>
+            </div>
+            <div class="col-auto">
+                <label for="end_date">End Date</label>
+                <input type="date" class="form-control" min="" max="" required id="end_date" name="end_date"
+                       readonly
+                       value={{ mySearch.end_date }}>
+            </div>
+            {% if mySearch.my_cities|length > 1 %}
+                <div class="col-auto">
+                    <label for="celsius_degree">Weather</label>
+                    <select class="form-control" name="celsius_degree" id="celsius_degree" required>
+                        {% if mySearch.celsius_degree != "" %}
+                            <option value={{ mySearch.celsius_degree }} selected disabled
+                                    hidden>{{ mySearch.celsius_degree }}</option>
+                        {% else %}
+                            <option value="">Choose...</option>
+                        {% endif %}
+                        <option value="0">Hot</option>
+                        <option value="1">Nice</option>
+                        <option value="2">Cold</option>
+                    </select>
+                </div>
+            {% endif %}
+        </div>
+        <div class="row mt-3 justify-content-center">
+            <button id="submit" onclick="checkSubmit(this)" type="submit"
+                    class="btn btn-secondary fw-bold border-white bg-white">submit
+            </button>
+        </div>
+    </form>
+
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(() => {
+            if (document.getElementById("start_date").value != "") {
+                document.getElementById("end_date").readOnly = false;
+            }
+        })
+
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+        function limitEndDate() {
+            document.getElementById("end_date").min = document.getElementById("start_date").value;
+            //max
+            let today = new Date(document.getElementById("end_date").min);
+            let date = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 20)
+            var str = formatDate(date);
+            document.getElementById("end_date").max = str;
+            document.getElementById("end_date").readOnly = false;
+        }
+
+        function checkSubmit(event) {
+            {% if mySearch.my_cities|length < 1 %}
+                alert("you need to choose city");
+            {% endif %}
+        }
+    </script>
+
+
+{% endblock %}

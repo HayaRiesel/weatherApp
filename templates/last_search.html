@@ -1,0 +1,26 @@
+
+
+{% extends "template.html" %}
+
+
+{% block main %}
+    {% if len_last_search == 0 %}
+        <h1>There is no search yet.</h1><br>
+    {% else %}
+        <h1>Your last searches:</h1><br>
+    {% endif %}
+
+    {% for i in range(0, len_last_search) %}
+        <form action="/choose_prev_search" method="POST">
+            <input type="hidden" name="search_index" value={{ i }}>
+            <button type="submit" name="fname" value="choose"
+                    class="btn btn-md btn-secondary fw-bold border-white bg-white">
+                City:<b> {{ last_search[i][0][0] }}</b>
+                start date: {{ last_search[i][1] }}
+                end date: {{ last_search[i][2] }}
+            </button>
+        </form>
+        <br>
+
+    {% endfor %}
+{% endblock %}

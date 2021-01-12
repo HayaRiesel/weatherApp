@@ -1,0 +1,23 @@
+{% extends "template.html" %}
+
+{% block main %}
+
+    <h1 class="float-md-start text-white mb-0">there are some cities that fit. choose one:</h1>
+    <div class="row py-3 justify-content-md-center">
+        {% for i in range(0, good_cities|length) %}
+            <div class="col-auto">
+                <form action="/results" method="POST">
+                    <input type="hidden" name="city_name" value={{ good_cities[i][0] }}>
+                    <input type="hidden" name="start_date" value={{ start_date }}>
+                    <input type="hidden" name="end_date" value={{ end_date }}>
+
+                    <input type="hidden" name="city_id" value={{ good_cities[i][1] }}>
+                    <input type="submit" class="btn btn-sm btn-secondary fw-bold border-white bg-white" name="fname"
+                           value={{ good_cities[i][0] }}>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+

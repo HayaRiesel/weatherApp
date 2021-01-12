@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.79.0">
+    <title>Weather trip </title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/sign-in/">
+
+
+    <!-- Bootstrap core CSS -->
+    <link href="static/ui/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="static/ui/css/login.css" rel="stylesheet">
+</head>
+
+<body class="text-center"
+      style="background-image: url('static/image/back_img.jpg');background-size: cover;">
+
+<main class="form-signin" style="background-color: #F2F3F4;border: 5px solid #D0D3D4;border-radius: 5px;">
+    <form action="/login" method="POST">
+        <img class="mb-4" src="static/image/profilepicture.png" alt="" width="72" height="80">
+        <h1 id="my_title" class="h3 mb-3 fw-normal">Please sign in</h1>
+        <label for="inputUser" class="visually-hidden">User name</label>
+        <input type="text" name="username" id="inputUser" class="form-control" placeholder="User name" required
+               autofocus>
+        <label for="inputPassword" class="visually-hidden">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <label for="email" class="invisible">Email</label>
+        <input type="email" style="visibility: hidden;display: none;margin-bottom: 10px;" name="email" id="email"
+               class="form-control" placeholder="email">
+        <input type="hidden" id="state" name="state" value="log">
+        {% if wrongTry == 1 %}
+            <p>Incorrect user name - please try again or sign up</p>
+        {% endif %}
+        {% if wrongTry == 2 %}
+            <p>Incorrect password - please try again</p>
+        {% endif %}
+
+        {% if wrongTry == 3 %}
+            <p style="background: red">Username already exists - please try another name</p>
+        {% endif %}
+
+        <button id="submitButton" class="w-100 btn btn-lg btn-warning" type="submit">Sign in</button>
+    </form>
+    <button class="btn" style="background: #F2F3F4;" onclick="signUp()">Don't have account? Sign up</button>
+    <script>
+        function signUp() {
+            document.getElementById("my_title").innerText = "Please sign up"
+            document.getElementById("email").style.visibility = "visible";
+            document.getElementById("email").style.display = "grid";
+            document.getElementById("email").required = true;
+            document.getElementById("submitButton").innerText = 'Sign up';
+            document.getElementById("state").value = "sign";
+
+        }
+    </script>
+</main>
+
+
+</body>
+</html>

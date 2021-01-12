@@ -1,0 +1,134 @@
+{% extends "template.html" %}
+
+
+{% block main %}
+    </br>      </br>      </br>
+
+    <h1>Search cities around the world to see their expected weather</h1><br>
+    <h6>If you choose more than one city, we will find the city that suits you best</h6>
+    <form class="lead" action="/search" method="POST">
+        <div class="row">
+            <div class="col-md-12">
+                {% if mySearch.my_cities|length >= 5 %}
+                    <input readonly class="form-control" type="text" name="city_name"
+                           placeholder="can't insert any more cities">
+                {% else %}
+                    <input class="form-control" type="text" name="city_name"
+                           placeholder="you can insert until 5 cities">
+                {% endif %}
+                <input type="hidden" name="action" value="search_and_show_cities">
+            </div>
+            {#                <div class="col-md-2">#}
+            {#                    <input class="btn btn-md btn-secondary fw-bold border-white bg-white" type="submit" name="fname"#}
+            {#                           value="search"><br>#}
+            {#                </div>#}
+
+        </div>
+    </form>
+
+    <div class="row" style="height:50px;">
+        {% if len == -1 %}
+            <p>Search did not return any results</p>
+        {% endif %}
+            {% if len == -2 %}
+            <p>Too many options - Choose a specific state to get results</p>
+        {% endif %}
+
+    </div>
+    <div class="row" style="height:50px;">
+        {% if mySearch.my_cities|length > 0 %}
+            {% for i in range(0, mySearch.my_cities|length) %}
+                <div class="col-auto">
+                    <form action="/search" method="POST">
+                        <input type="hidden" name="city_name" value={{ mySearch.my_cities[i][0] }}>
+                        <input type="hidden" name="action" value="remove_city">
+                        <input type="hidden" name="city_id" value={{ mySearch.my_cities[i][1] }}>
+                        <button type="submit" class="btn btn-sm btn-secondary fw-bold border-white bg-white"
+                                name="fname"
+                                value={{ mySearch.my_cities[i][0] }}>
+                            <img src="/static/image/x-square-fill.svg">
+                            {{ mySearch.my_cities[i][0] }}</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+
+    <!–– date and final submit ––>
+    <div style="height:100px;">
+        {% block choose_date %}
+            {% if mySearch.my_cities | length > 0 %}
+                <button onclick="submit()" class="lead btn btn-lg btn-secondary fw-bold border-white bg-white">
+                    Choose Dates for your Trip
+                </button>
+            {% endif %}
+        {% endblock %}
+    </div>
+
+
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        function submit() {
+            {% if mySearch.my_cities|length < 1 %}
+                alert("you need to choose city");
+            {% else %}
+                window.location.href = "/search_submit_date";
+            {% endif %}
+        }
+    </script>
+
+
+    {% if len > 0 %}
+        <script>
+        $(document).ready(function () {
+            // Show the Modal on load
+            $("#myModal").modal("show");
+        });
+    {% endif %}
+
+</script>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" show tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-dark" id="exampleModalLongTitle">Choose cities</h5>
+                    <form action="/search" method="POST">
+                        <input type="hidden" name="action" value="close_searches_windows">
+                        <input type="hidden" name="city_name" value="0">
+                        <input type="submit" class="btn btn-secondary" value="X" name="fname">
+                    </form>
+                </div>
+                <div class="modal-body">
+                    {% for i in range(0, len) %}
+                        <div class="col-auto align-self-center">
+                            <form action="/search" method="POST">
+                                <input type="hidden" name="city_name" value= {{ cities[i][0] }}>
+                                <input type="hidden" name="action" value="choose_city">
+                                <input type="hidden" name="city_id" value={{ cities[i][1] }}>
+                                <button class="btn btn-sm btn-secondary fw-bold border-white bg-white" type="submit"
+                                        value={{ cities[i][0] }} name="fname">{{ cities[i][0] }}
+                                    {% if cities[i][3] != None and cities[i] | length> 3 %}
+                                        , {{ cities[i][3] }}
+                                    {% endif %}
+                                    {% if cities[i] | length > 2 %}
+                                        , {{ cities[i][2] }}
+                                    {% endif %}
+                                </button>
+                                <br>
+                            </form>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,126 @@
+
+
+{% extends "template.html" %}
+
+{% block body %}
+    <body class="d-flex text-center bg-dark"
+          style="text-shadow: 0 0rem 0rem rgba(0, 0, 0, 0);background-image: url('static/image/back_img_2.jpg');background-size:cover;min-height: 100vh">
+
+    <div class="d-flex w-100 h-100 p-3 mx-auto flex-column">
+{% endblock %}
+
+{% block main %}
+    {% if state == 0 %}
+        <h3 class="text-white my-5">There are no results to this search. please try different dates or cities</h3>
+        <form action="/start_new_search">
+            <button type="submit" class="btn btn-sm btn-secondary fw-bold border-white bg-white">Return to search page
+            </button>
+        </form>
+    {% else %}
+        <div class="row py-4">
+            <h3 class="text-white my-2">weather for <b>{{ city_name }}</b> between {{ dates[0] }}
+                to {{ dates[dates|length - 1] }}</h3>
+
+        </div>
+        <div class="row">
+        <div class="col-1"></div>
+        <div class="col-6">
+            {% for i in range(0, dates|length) %}
+
+                <div class="card mb-3" style="max-width: 540px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                                {% if temp_by_day[i][0] == None
+                                    and temp_by_day[i][1] == None
+                                    and temp_by_day[i][2] == None
+                                    and temp_by_day[i][3] == None
+                                    and temp_by_day[i][4] == None
+                                    and temp_by_day[i][5] == None
+                                    %}
+                                <p>No data for this day</p>
+                             {% else %}
+                            <img class="card-img-top" style="height: 100px;width: 100px;" alt="..."
+                                 src={{ weather_img[i] }}>
+                            <h5 class="card-title">{{ dates[i] }}</h5>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    {% if temp_by_day[i][0] != None %}
+                                        <li class="list-group-item">avg temperature : {{ temp_by_day[i][0] }} &#8451
+                                        </li>
+                                    {% endif %}
+                                    {% if temp_by_day[i][1] != None %}
+                                        <li class="list-group-item">std of avg temperature
+                                            : {{ temp_by_day[i][1] }}</li>
+                                    {% endif %}
+                                    {% if temp_by_day[i][2] != None %}
+                                        <li class="list-group-item">max temperature : {{ temp_by_day[i][2] }} &#8451
+                                        </li>
+                                    {% endif %}
+                                    {% if temp_by_day[i][3] != None %}
+                                        <li class="list-group-item">std of max temperature
+                                            : {{ temp_by_day[i][3] }}</li>
+                                    {% endif %}
+                                    {% if temp_by_day[i][4] != None %}
+                                        <li class="list-group-item">min temperature : {{ temp_by_day[i][4] }} &#8451
+                                        </li>
+                                    {% endif %}
+                                    {% if temp_by_day[i][5] != None %}
+                                        <li class="list-group-item">std of min temperature
+                                            : {{ temp_by_day[i][5] }}</li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+        <div class="col-3">
+            <div class="row my-3">
+                <div class="card text-center" style="min-width: 30rem;">
+                    {% if  rainy_and_snowy[0] > 40 %}
+                        <div class="row justify-content-md-center">
+                            <img alt="..." style="height:80px;width: 80px" src="/static/image/animated/umbrella.svg">
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <p class="card-text">Percentage chance of rain: {{ rainy_and_snowy[0] }}%</p>
+                        {% if rainy_and_snowy[1] != None %}
+                            <p class="card-text">average precipitation in this month: {{ rainy_and_snowy[1] }} mm</p>
+                        {% endif %}
+
+                    </div>
+
+                    {% if  rainy_and_snowy[2] > 30 %}
+                                {% for i in range(300) %}
+  <div class="snowflake">
+  ❅
+  </div>
+        {%endfor %}
+
+                        <div class="row justify-content-md-center">
+                            <img class="card-img-top" alt="..." style="height:80px;width: 80px"
+                                 src="/static/image/animated/snowman.svg">
+                        </div>
+                    {% endif %}
+
+                    <div class="card-body">
+                        <p class="card-text">Percentage chance of snow: {{ rainy_and_snowy[2] }}%</p>
+                        {% if rainy_and_snowy[3] != None %}
+                            <p class="card-text">average snow depth in this month: {{ rainy_and_snowy[3] }} mm</p>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+    {% endif %}
+{% endblock %}
