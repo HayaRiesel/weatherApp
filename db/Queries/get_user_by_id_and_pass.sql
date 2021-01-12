@@ -1,0 +1,1 @@
+SELECT password FROM weathertrip.users where user_id = :id;

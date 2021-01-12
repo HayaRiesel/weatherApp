@@ -1,0 +1,1 @@
+INSERT INTO weathertrip.users(user_id, password, email) VALUES (:nameid ,:pas, :email);

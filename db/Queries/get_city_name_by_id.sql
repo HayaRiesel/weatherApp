@@ -1,0 +1,1 @@
+SELECT city_name FROM weathertrip.cities where city_id = :id;
